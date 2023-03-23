@@ -1,14 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
+import { JsxElement } from 'typescript';
+
 import './App.css';
 import Card from './components/Card';
 
 
 
+
 function App() {
 
+//const [img, setimg] = useState()
+const level = [6, 10, 12]
 
-
+function createCardElems() : JSX.Element[] {
+  let elems = []
+  for (let i=0; i < level[2]; i++) {
+      elems.push(<Card key={i} />)
+  }
+  return elems
+}
 
 
   return (
@@ -24,18 +34,7 @@ function App() {
 
         </div>
         <div className="board_container">
-          <Card  />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+        {createCardElems()}
           
         </div>
       </div>
