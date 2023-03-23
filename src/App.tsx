@@ -4,16 +4,33 @@ import { JsxElement } from 'typescript';
 import './App.css';
 import Card from './components/Card';
 
+import artDetails from "./assets/art"
+
 
 
 
 function App() {
 
-//const [img, setimg] = useState()
-const level = [6, 10, 12]
+const level = [8, 10, 12]
+
+function generateRandomNums() {
+    
+  const randomNumsArr : number[] = [];
+    while (randomNumsArr.length<12) {
+      let num = Math.floor(Math.random()*4)
+        if (!(randomNumsArr.includes(num))){
+        randomNumsArr.push(num);
+      }
+  }
+  return randomNumsArr;
+}
+console.log(generateRandomNums())
 
 function createCardElems() : JSX.Element[] {
   let elems = []
+
+  const randomNums = generateRandomNums()
+
   for (let i=0; i < level[2]; i++) {
       elems.push(<Card key={i} />)
   }
