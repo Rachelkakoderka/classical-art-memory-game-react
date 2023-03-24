@@ -20,7 +20,7 @@ export default function Card(props: Props) {
 
     function handleClick(e : SyntheticEvent) {
        e.preventDefault()
-       if (!isHeld && !disable) {
+       if (!isHeld && !disable && isHidden) {
         move(id)
        }
     }

@@ -68,7 +68,7 @@ function move(id : string) {
     changeIsHidden(id, false);
     const firstCard = cards.find(x => x.id === openCard)
     const secondCard = cards.find(x => x.id === id);
-    console.log(firstCard?.art.title, secondCard?.art.title);
+    console.log(firstCard?.id, secondCard?.id);
     if (firstCard?.art.title === secondCard?.art.title) {
       changeIsHeld(id, true)
       changeIsHeld(openCard, true)
