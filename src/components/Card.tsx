@@ -1,16 +1,33 @@
 import React, {useState} from 'react'
-import four from "../assets/four.jpg" 
-import Klimt1 from "../assets/GustavKlimt-Love.jpg"
+import {artPiece} from "../interface"
 
-export default function Card() {
+interface Props {
+    id: string,
+    artPiece: artPiece,
+    move : Function,
+    openCards: string[]
+}
 
-    const [isHidden, setIsHidden] = useState<boolean>(false)
+export default function Card(props: Props) {
+    
+    const { artPiece, id , move, openCards } = props 
+    const [isHidden, setIsHidden] = useState<boolean>(openCards.includes(id))
+
+    function handleClick(id : string){
+        setIsHidden(prevState => !prevState)
+    }
+
+    const img = require(`../assets/${artPiece.fileName}`)
+  
 
   return (
     <>
-        <div className='card'>
+        <div id={id} className='card' onClick={(e) => {
+            move(id)}}>
             
-            <img className= {isHidden ? "card_img covered" : 'card_img'} src={Klimt1} />
+            <img 
+                className= {isHidden ? "card_img covered" : 'card_img'} 
+                src={img} />
             <div className=""></div>
         </div>  
     </>
