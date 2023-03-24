@@ -19,12 +19,19 @@ const levels = [4, 5, 6]
 
 
 //const [isStarted, setIsStarted] = useState<boolean>(true)
+const [disable, setDisable] = useState<boolean>(false)
 const [chosenLevel, setChosenLevel] = useState<number>(levels[2])
 const artForTheGame = [...artCollection.slice(0, chosenLevel),...artCollection.slice(0, chosenLevel)];
 const numsOfCards = chosenLevel*2;
 const [openCard, setOpenCard] = useState<string>()
 const [randomNums, setRandomNums] = useState<number[]>(generateRandomNums(numsOfCards))
-const [cards, setCards] = useState(createCards())
+const [cards, setCards] = useState<CardObject[]>(
+  [{ 
+    id: "",
+    art: artForTheGame[0],
+    isHeld: false,
+    isHidden: false,
+  }])
 
 
 function changeIsHidden(id : string, hidden: boolean ) {
@@ -56,29 +63,30 @@ function createCards() : CardObject[] {
 //console.log(cards)
 
 function move(id : string) {
-  console.log("Masz tyle otwartych kart: ", openCard);
-
   if (openCard) {
-    
-    console.log("sercond card opened")
+    setDisable(true)
     changeIsHidden(id, false);
-    const firstCard = cards.find(x => x.id = openCard)
-    const secondCard = cards.find(x => x.id = id);
+    const firstCard = cards.find(x => x.id === openCard)
+    const secondCard = cards.find(x => x.id === id);
+    console.log(firstCard?.art.title, secondCard?.art.title);
     if (firstCard?.art.title === secondCard?.art.title) {
       changeIsHeld(id, true)
       changeIsHeld(openCard, true)
+      setDisable(false)
     } else {
       setTimeout(() => {
+        setOpenCard("")
         changeIsHidden(id, true);
         changeIsHidden(openCard, true);
-      },1000)
+        setDisable(false)
+      },500)
     }
   } else {
     changeIsHidden(id, false);
     setOpenCard(id)
   }
 }
-console.log(openCard)
+//console.log(openCard)
 
 
 function generateRandomNums(x : number) {   
@@ -103,11 +111,12 @@ function createCardElems() : JSX.Element[] {
           isHidden = {card.isHidden}
           move={move}
           openCard={openCard}
-          isHeld={card.isHeld} />              
+          isHeld={card.isHeld}
+          disable={disable} />              
     })
 }
 
-//useEffect(() => setCards(createCardElems()), [isStarted])
+useEffect(() => setCards(createCards()), [])
 
 
 

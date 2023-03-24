@@ -7,21 +7,22 @@ interface Props {
     isHidden : boolean,
     move : Function,
     openCard?: string,
-    isHeld: boolean
+    isHeld: boolean,
+    disable: boolean
 }
 
 export default function Card(props: Props) {
     
-    const { artPiece, id , move, isHidden , isHeld } = props;
+    const { artPiece, id , move, isHidden , isHeld ,disable } = props;
 
     const img = require(`../assets/${artPiece.fileName}`)
     //console.log("Card component widzi openCards:", openCards)
 
     function handleClick(e : SyntheticEvent) {
        e.preventDefault()
-       if (!isHeld) {
+       if (!isHeld && !disable) {
         move(id)
-       }   
+       }
     }
 
   return (
