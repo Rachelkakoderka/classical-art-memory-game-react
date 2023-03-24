@@ -103,6 +103,8 @@ a {
 }
 .main{
   display: flex;
+  flex-direction: column;
+  text-align: center;
   padding: 1em;
   max-width: 60vw;
   margin-inline: auto;
@@ -121,6 +123,7 @@ a {
   display: flex;
   background-color: purple;
   border-radius: 5px;
+  cursor: pointer;
   
 }
 .card_img {

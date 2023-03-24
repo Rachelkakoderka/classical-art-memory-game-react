@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { JsxElement } from 'typescript';
 import {nanoid} from "nanoid"
 import {artPiece, CardObject} from "./interface"
+import Confetti from 'react-confetti'
 
 import './App.css';
 import Card from './components/Card';
@@ -18,7 +19,7 @@ const levels = [4, 5, 6]
 
 
 
-//const [isStarted, setIsStarted] = useState<boolean>(true)
+const [isWon, setIsWon] = useState<boolean>(false)
 const [disable, setDisable] = useState<boolean>(false)
 const [chosenLevel, setChosenLevel] = useState<number>(levels[2])
 const artForTheGame = [...artCollection.slice(0, chosenLevel),...artCollection.slice(0, chosenLevel)];
@@ -63,30 +64,37 @@ function createCards() : CardObject[] {
 //console.log(cards)
 
 function move(id : string) {
+  //logic for the second opened card:
   if (openCard) {
     setDisable(true)
     changeIsHidden(id, false);
+    // logic  to find out if cards are the same
     const firstCard = cards.find(x => x.id === openCard)
     const secondCard = cards.find(x => x.id === id);
     console.log(firstCard?.id, secondCard?.id);
+
     if (firstCard?.art.title === secondCard?.art.title) {
+      // held both cards open
       changeIsHeld(id, true)
       changeIsHeld(openCard, true)
       setDisable(false)
+      setOpenCard("")
     } else {
+      //hide both opened cards
+      setOpenCard("")
       setTimeout(() => {
-        setOpenCard("")
         changeIsHidden(id, true);
         changeIsHidden(openCard, true);
         setDisable(false)
       },500)
     }
+    //logic for the first opened card:
   } else {
     changeIsHidden(id, false);
     setOpenCard(id)
   }
 }
-//console.log(openCard)
+console.log(chosenLevel)
 
 
 function generateRandomNums(x : number) {   
@@ -116,7 +124,12 @@ function createCardElems() : JSX.Element[] {
     })
 }
 
-useEffect(() => setCards(createCards()), [])
+useEffect(() => setCards(createCards()), [chosenLevel])
+useEffect(() => {
+  if (cards.filter(x=> x.isHeld === true).length === cards.length) {
+    setIsWon(true) 
+  }
+}, [cards])
 
 
 
@@ -124,12 +137,24 @@ useEffect(() => setCards(createCards()), [])
 
   return (
     <div className="app">
+         {isWon ? <Confetti /> : ""}
       <header className="app-header">
         <h2>ClassicalArt Memory Game</h2>
       </header>
+      
       <div className='main'>
         <div className="level_container">
-
+          {/*
+          experimental feature
+          <button 
+            onClick={()=> {setChosenLevel(levels[0])}}>Easy
+          </button>
+          <button 
+            onClick={()=> {setChosenLevel(levels[1])}}>Medium
+          </button>
+          <button 
+            onClick={()=> {setChosenLevel(levels[2])}}>Hard
+          </button> */}
         </div>
         <div className="stats_container">
 
@@ -138,7 +163,10 @@ useEffect(() => setCards(createCards()), [])
         {createCardElems()}
           
         </div>
+        <div> {isWon ? "Congratulations!" : "" }</div>
+        
       </div>
+      
       <footer>
         Created by <a href='www.aleksandragalach.com'> Aleksandra Gałach </a> 2023
       </footer>
