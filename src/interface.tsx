@@ -9,5 +9,5 @@ export interface CardObject {
     id: string,
     art: artPiece,
     isHeld: boolean,
-    isHidden: boolean
+    isHidden: boolean,
 }

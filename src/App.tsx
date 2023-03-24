@@ -27,6 +27,17 @@ const [randomNums, setRandomNums] = useState<number[]>(generateRandomNums(numsOf
 const [cards, setCards] = useState(createCards())
 
 
+function changeIsHidden(id : string, hidden: boolean ) {
+  return setCards(
+    prevCards => prevCards.map( card => card.id === id ? {...card, isHidden: hidden} : {...card} )
+  )
+}
+
+function changeIsHeld(id : string, held: boolean ) {
+  return setCards(
+    prevCards => prevCards.map( card => card.id === id ? {...card, isHeld: held} : {...card} )
+  )
+}
 
 
 
@@ -36,7 +47,7 @@ function createCards() : CardObject[] {
      id : nanoid(),
      art : artForTheGame[x],
      isHeld : false,
-     isHidden: true
+     isHidden: true,
     }}
     )
     return cards
@@ -45,25 +56,29 @@ function createCards() : CardObject[] {
 //console.log(cards)
 
 function move(id : string) {
-  console.log("Masz tyle otwartych kart: ", openCards);
+  console.log("Masz tyle otwartych kart: ", openCard);
 
-  if (openCard.length === 0) {
-    setCards(
-      prevCards => prevCards.map( card => card.id === id ? {...card, isHidden:false} : {...card} )
-    )
+  if (openCard) {
+    
+    console.log("sercond card opened")
+    changeIsHidden(id, false);
+    const firstCard = cards.find(x => x.id = openCard)
+    const secondCard = cards.find(x => x.id = id);
+    if (firstCard?.art.title === secondCard?.art.title) {
+      changeIsHeld(id, true)
+      changeIsHeld(openCard, true)
+    } else {
+      setTimeout(() => {
+        changeIsHidden(id, true);
+        changeIsHidden(openCard, true);
+      },1000)
+    }
+  } else {
+    changeIsHidden(id, false);
     setOpenCard(id)
-  } else if (openCards.length == 1) {
-    setOpenCards(prevState => [...prevState, id])
-  } else if (openCard.length == 2) {
-    setOpenCard([])
-    setCards(
-      prevCards => prevCards.map( card => ({...card, isHidden:true}))
-    )
   }
-
 }
-
-console.log(openCards)
+console.log(openCard)
 
 
 function generateRandomNums(x : number) {   
@@ -87,7 +102,8 @@ function createCardElems() : JSX.Element[] {
           artPiece={card.art}
           isHidden = {card.isHidden}
           move={move}
-          openCards={openCards} />              
+          openCard={openCard}
+          isHeld={card.isHeld} />              
     })
 }
 
