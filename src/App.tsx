@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { JsxElement } from 'typescript';
 import {nanoid} from "nanoid"
-import {artPiece} from "./interface"
+import {artPiece, CardObject} from "./interface"
 
 import './App.css';
 import Card from './components/Card';
@@ -11,29 +11,59 @@ import artCollection from "./assets/art"
 
 function App() {
 
-// const [isStarted, setIsStarted] = useState<boolean>(true)
+
 
 const levels = [4, 5, 6]
-const chosenLevel = levels[2]
+
+
+
+
+//const [isStarted, setIsStarted] = useState<boolean>(true)
+const [chosenLevel, setChosenLevel] = useState<number>(levels[2])
+const artForTheGame = [...artCollection.slice(0, chosenLevel),...artCollection.slice(0, chosenLevel)];
 const numsOfCards = chosenLevel*2;
-const artForTheGame = [...artCollection.slice(0, chosenLevel),...artCollection.slice(0, chosenLevel)]
+const [openCard, setOpenCard] = useState<string>()
+const [randomNums, setRandomNums] = useState<number[]>(generateRandomNums(numsOfCards))
+const [cards, setCards] = useState(createCards())
 
-const [openCards, setOpenCards] = useState<string[]>([])
-const [cards, setCards] = useState(createCardElems())
 
 
-console.log(openCards.length)
+
+
+function createCards() : CardObject[] {
+   const cards : CardObject[] =  randomNums.map((x : number) => {
+    return { 
+     id : nanoid(),
+     art : artForTheGame[x],
+     isHeld : false,
+     isHidden: true
+    }}
+    )
+    return cards
+}
+
+//console.log(cards)
 
 function move(id : string) {
-  
-  console.log("cliked: ", id)
-  if (openCards.length <1) {
-    console.log(openCards.length)
-    setOpenCards(prevState => [...prevState, id])
+  console.log("Masz tyle otwartych kart: ", openCards);
 
+  if (openCard.length === 0) {
+    setCards(
+      prevCards => prevCards.map( card => card.id === id ? {...card, isHidden:false} : {...card} )
+    )
+    setOpenCard(id)
+  } else if (openCards.length == 1) {
+    setOpenCards(prevState => [...prevState, id])
+  } else if (openCard.length == 2) {
+    setOpenCard([])
+    setCards(
+      prevCards => prevCards.map( card => ({...card, isHidden:true}))
+    )
   }
 
 }
+
+console.log(openCards)
 
 
 function generateRandomNums(x : number) {   
@@ -48,20 +78,17 @@ function generateRandomNums(x : number) {
   return randomNumsArr;
 }
 
-console.log(openCards)
 
 function createCardElems() : JSX.Element[] {
-  const randomNums = generateRandomNums(numsOfCards)
-
-  const cardElems = randomNums.map( (x : number) => {
-    let id = nanoid();
-    return <Card key={id}
-                 id={id} 
-                 artPiece={artForTheGame[x]}
-                 move={move}
-                 openCards={openCards} />      
-  })
-  return cardElems
+  
+  return cards.map( (card : CardObject) => {
+    return <Card key={card.id}
+          id={card.id} 
+          artPiece={card.art}
+          isHidden = {card.isHidden}
+          move={move}
+          openCards={openCards} />              
+    })
 }
 
 //useEffect(() => setCards(createCardElems()), [isStarted])
@@ -83,7 +110,7 @@ function createCardElems() : JSX.Element[] {
 
         </div>
         <div className="board_container">
-        {cards}
+        {createCardElems()}
           
         </div>
       </div>

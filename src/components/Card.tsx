@@ -4,31 +4,26 @@ import {artPiece} from "../interface"
 interface Props {
     id: string,
     artPiece: artPiece,
+    isHidden : boolean,
     move : Function,
     openCards: string[]
 }
 
 export default function Card(props: Props) {
     
-    const { artPiece, id , move, openCards } = props 
-    const [isHidden, setIsHidden] = useState<boolean>(openCards.includes(id))
-
-    function handleClick(id : string){
-        setIsHidden(prevState => !prevState)
-    }
+    const { artPiece, id , move, openCards, isHidden } = props;
 
     const img = require(`../assets/${artPiece.fileName}`)
-  
+    //console.log("Card component widzi openCards:", openCards)
 
   return (
     <>
-        <div id={id} className='card' onClick={(e) => {
+        <div id={id} className='card' onClick={(e) => { e.preventDefault()
             move(id)}}>
             
             <img 
                 className= {isHidden ? "card_img covered" : 'card_img'} 
                 src={img} />
-            <div className=""></div>
         </div>  
     </>
     )
