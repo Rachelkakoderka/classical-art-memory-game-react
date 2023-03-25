@@ -152,10 +152,14 @@ footer {
     max-width: 90%;
   }
   .app-header{
-    padding: .1em;
+    padding: .3em;
   }
   .board_container {
     grid-template-columns: repeat(3, 1fr);
+  }
 
+  .card {
+    width: 6em;
+    height: 6em;
   }
 }

@@ -163,7 +163,7 @@ useEffect(() => {
         {createCardElems()}
           
         </div>
-        <div> {isWon ? "Congratulations!" : "" }</div>
+        {/* <div> {isWon ? "Congratulations!" : "" }</div> */}
         
       </div>
       
