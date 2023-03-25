@@ -105,6 +105,7 @@ a {
   display: flex;
   flex-direction: column;
   text-align: center;
+  justify-content: flex-start;
   padding-top: 1em;
   margin-inline: auto;
   width: 70vw;
@@ -157,8 +158,8 @@ footer {
   .board_container {
     grid-template-columns: repeat(3, minmax(1em, 6em));
     gap: 0.5em;
-
-  }
+    
+    }
 
   .card {
     max-width: 6em;
