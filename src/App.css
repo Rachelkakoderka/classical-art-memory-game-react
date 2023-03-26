@@ -108,6 +108,8 @@ a {
   padding-top: 1em;
   margin-inline: auto;
   width: 70vw;
+  /* if you change this whink about Safari which doesnt know how to calculate height of cards components */
+  max-height: 70wh;
 }
 
 .board_container {
