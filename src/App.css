@@ -158,7 +158,7 @@ footer {
   }
   .board_container {
     grid-template-columns: repeat(3, minmax(1em, 6em));
-    grid-template-rows: minmax(1em, 6em);
+    aspect-ratio: 1/1;
     gap: 0.5em;
     }
 
